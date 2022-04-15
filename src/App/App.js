@@ -1,44 +1,44 @@
 import React from 'react';
 import './App.css';
-import SideMenu from'../components/SideMenu';
-import { CssBaseline, makeStyles , createMuiTheme } from '@material-ui/core';
+import SideMenu from '../components/SideMenu';
+import { CssBaseline, makeStyles, createMuiTheme } from '@material-ui/core';
 import Header from '../components/Header';
 import { ThemeProvider } from '@mui/material';
-import Patients from '../pages/Patients/Patients';
+import DB from '../pages/DB/DB';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main:'#1976d2',
-      light:'#42a5f5'
-    },secondary:{
-      main:'#9c27b0',
+      main: '#1976d2',
+      light: '#42a5f5'
+    }, secondary: {
+      main: '#9c27b0',
       light: '#ba68c8'
-    },background:{
-      default: '#f4f5fd'  
+    }, background: {
+      default: '#f4f5fd'
     },
-  
+
     overrides: {
       MuiAppBar: {
-      root: {
-        transform: 'translateZ(0)'
+        root: {
+          transform: 'translateZ(0)'
+        },
+      }
     },
+    props: {
+      MuiIconButton: {
+        disableRipple: true
+      }
     }
-  },
-  props: {
-    MuiIconButton: {
-       disableRipple:true
-    }
-  }
   }
 })
 
 
 
 const useStyles = makeStyles({
-  appMain:{
-    paddingLeft:'320px',
-    width:'100%'
+  appMain: {
+    paddingLeft: '320px',
+    width: '100%'
   }
 })
 
@@ -50,8 +50,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
-      <Header/>
-      <Patients />
+        <Header />
+        <DB />
       </div>
       <CssBaseline />
     </ThemeProvider>
