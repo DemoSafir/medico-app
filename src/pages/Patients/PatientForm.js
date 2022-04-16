@@ -1,8 +1,8 @@
 import React from 'react'
-import { FormControlLabel, Grid, Radio, RadioGroup, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useForm, Form } from '../../components/useForm'
-import { FormLabel } from '@mui/material';
-import Input from '../../components/controls/Input';
+import Controls from '../../components/controls/Controls';
+import * as patientService from '../../services/patientService';
 
 const sexeItems = [
     { id: 'homme', title: 'Homme' },
@@ -33,29 +33,74 @@ export default function PatientForm() {
         <Form>
             <Grid container>
                 <Grid item xs={6}>
-                    <Input
+                    <Controls.Input
+                        name="cin"
+                        label="CIN"
+                        value={values.cin}
+                        onChange={handleInputChange}
+                    />
+                    <Controls.Input
                         name="nom"
                         label="Nom"
                         value={values.nom}
                         onChange={handleInputChange}
                     />
-                    <Input
+                    <Controls.Input
                         name="prenom"
                         label="Prenom"
                         value={values.prenom}
                         onChange={handleInputChange}
                     />
+                     <Controls.Input
+                        name="telephone"
+                        label="Telephone"
+                        value={values.telephone}
+                        onChange={handleInputChange}
+                    />
+                     <Controls.Input
+                        name="addresse"
+                        label="Addresse"
+                        value={values.addresse}
+                        onChange={handleInputChange}
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <FormLabel>Sexe</FormLabel>
-                    <RadioGroup row
-                        name="sexe"
-                        value={values.sexe}
-                        onChange={handleInputChange}>
-                        {sexeItems.map(item => (
-                            <FormControlLabel value={item.id} control={<Radio />} label={item.title} />
-                        ))}
-                    </RadioGroup>
+                    <Controls.Input
+                        name="email"
+                        label="Email"
+                        value={values.email}
+                        onChange={handleInputChange}
+                    />
+                    <Controls.RadioGroup
+                            name="sexe"
+                            label="Sexe"
+                            value={values.sexe}
+                            onChange={handleInputChange}
+                            items={sexeItems}
+                    />
+                    <Controls.DatePicker
+                            name="dateNaissance"
+                            label="Date Naissance"
+                            value={values.dateNaissance}
+                            onChange={handleInputChange}
+                    />
+                    <Controls.Select
+                            name="mutuelle"
+                            label="Mutuelle"
+                            value={values.mutuelle}
+                            onChange={handleInputChange}
+                            options={patientService.getMutuelleCollection()}
+                    />
+                    <div>
+                        <Controls.Button
+                            type="submit"
+                            text="Enregistrer"
+                        />
+                        <Controls.Button
+                            text="Annuler"
+                            color="default"
+                        />
+                    </div>
                 </Grid>
             </Grid>
         </Form>
