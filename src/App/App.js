@@ -5,7 +5,8 @@ import { CssBaseline, makeStyles, createMuiTheme } from '@material-ui/core';
 import Header from '../components/Header';
 import { ThemeProvider } from '@mui/material';
 import DB from '../pages/DB/DB';
-import RendezVous from '../pages/RendezVous';
+
+import Patients from '../pages/Patients/Patients';
 
 const theme = createMuiTheme({
   palette: {
@@ -52,8 +53,8 @@ function App() {
       <SideMenu />
       <div className={classes.appMain}>
         <Header />
-        {/* <DB /> */}
-        <RendezVous />
+
+        <Patients />
       </div>
       <CssBaseline />
     </ThemeProvider>
