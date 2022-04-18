@@ -89,7 +89,7 @@ export default function Patients() {
                         variant="outlined"
                         startIcon={<AddIcon />  }
                         className={classes.newButton}
-                        
+                        onClick={() => setOpenPopup(true)}
                     /> 
                  </Toolbar>
                  <TblContainer>

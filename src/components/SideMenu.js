@@ -7,7 +7,7 @@ const style = {
     sideMenu: {
         display: 'flex',
         flexDirection: 'column',
-        position: 'absolute',
+        position: 'fixed',
         left: '0px',
         width:'320px',
         height:'150vh',
@@ -16,8 +16,8 @@ const style = {
 }
 
 
-const  SideMenu = (props) => {
-     
+const SideMenu = (props) => {
+
   const { classes } = props;
   return (
     <div className={classes.sideMenu}>
