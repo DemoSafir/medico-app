@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, makeStyles, Typography } from '@material-ui/core';
 import Controls from "./controls/Controls";
@@ -37,5 +38,6 @@ export default function Popup(props) {
                 {children}
             </DialogContent>
         </Dialog>
+
     )
 }

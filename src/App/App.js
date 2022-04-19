@@ -12,11 +12,11 @@ import Patients from '../pages/Patients/Patients';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5'
+      main: '#333996',
+      light: '#3c44b126'
     }, secondary: {
-      main: '#9c27b0',
-      light: '#ba68c8'
+      main: '#f83245',
+      light: '#f8324526'
     }, background: {
       default: '#f4f5fd'
     },
@@ -55,8 +55,10 @@ function App() {
       <div className={classes.appMain}>
         <Header />
         {/* <DB /> */}
+
         <RendezVous />
         {/* <Patients /> */}
+
       </div>
       <CssBaseline />
     </ThemeProvider>

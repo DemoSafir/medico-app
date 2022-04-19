@@ -4,15 +4,15 @@ import { withStyles } from '@material-ui/core'
 // withStyles & makeStyles
 
 const style = {
-  sideMenu: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'fixed',
-    left: '0px',
-    width: '320px',
-    height: '100vh',
-    backgroundColor: '#253053'
-  }
+    sideMenu: {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        left: '0px',
+        width:'320px',
+        height:'150vh',
+        backgroundColor: '#253053'
+    }
 }
 
 
