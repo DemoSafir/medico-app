@@ -55,8 +55,10 @@ function App() {
       <div className={classes.appMain}>
         <Header />
         {/* <DB /> */}
-        {/* <RendezVous /> */}
+
         <RendezVous />
+        {/* <Patients /> */}
+
       </div>
       <CssBaseline />
     </ThemeProvider>

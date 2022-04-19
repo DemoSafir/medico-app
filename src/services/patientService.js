@@ -37,3 +37,4 @@ export function getAllPatients(){
         mutuelle : mutuelles[x.mutuelle-1].title
     }))
 }
+
