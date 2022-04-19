@@ -2,19 +2,16 @@ import * as React from 'react';
 import PageHeader from '../components/PageHeader'
 import { CalendarMonth } from '@mui/icons-material'
 import { Paper, makeStyles } from '@material-ui/core'
-// modal
-import Button from '@mui/material/Button';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Typography from '@mui/material/Typography';
-import { BootstrapDialog, BootstrapDialogTitle } from '../components/BootstrapDialog'
+// popUp
+import Popup from '../components/Popup';
+import RdvForm from './RdvForm'
 // full calendar
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -24,40 +21,49 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const events = [
-    {
-        id: 1,
-        title: 'event 1',
-        start: '2021-06-14T10:00:00',
-        end: '2021-06-14T12:00:00',
-    },
-    {
-        id: 2,
-        title: 'event 2',
-        start: '2021-06-16T13:00:00',
-        end: '2021-06-16T18:00:00',
-    },
-];
 
 
 function RendezVous() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [events, setEvents] = React.useState([]);
+    const [openPopup, setOpenPopup] = React.useState(false);
     const [eventDate, setEventDate] = React.useState();
+    const [eventId, setEventId] = React.useState(null);
 
     const handleClose = () => {
-        setOpen(false);
+        setOpenPopup(false);
     };
 
     const handleAddEvent = (e) => {
-        setOpen(true)
-        setEventDate(e.dateStr)
+        setOpenPopup(true)
+        setEventDate(e.date)
+    }
+    const handleEditEvent = (e) => {
+        setOpenPopup(true)
+        setEventId(e.event.id)
     }
 
     const handleSelectRange = (e) => {
         // setOpen(true)
         // setEventDate(e.dateStr)
     }
+
+    // Load Events
+    useEffect(() => {
+        axios.get(`http://localhost:8080/api/v1/rendezVous/`)
+            .then(res => {
+                const temps = []
+                res.data.map(e => {
+                    const temp = {}
+                    temp.id = e.idRdv;
+                    temp.title = e.motifRdv;
+                    temp.start = e.heureDebut;
+                    temp.end = e.heureFin;
+                    temps.push(temp)
+                })
+                setEvents(temps)
+            })
+    }, [openPopup])
     return (
         <>
             <PageHeader
@@ -75,37 +81,27 @@ function RendezVous() {
                     headerToolbar={{
                         center: 'dayGridMonth,timeGridWeek,timeGridDay',
                     }}
-
+                    eventColor="#f50057"
                     events={events}
                     nowIndicator
                     dateClick={handleAddEvent}
-                    eventClick={(e) => prompt(e.event.id)}
+                    eventClick={handleEditEvent}
                     select={handleSelectRange}
                 />
             </Paper>
 
-            <BootstrapDialog
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}
+            <Popup
+                title="Rendez Vous"
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    Ajouter Rendez-Vous
-                </BootstrapDialogTitle>
-                <DialogContent dividers>
-                    <Typography gutterBottom>
-                        Selected date is {eventDate}
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant='outlined' color='error' onClick={handleClose}>
-                        Annuler
-                    </Button>
-                    <Button variant='contained' color='success' style={{ color: 'white' }} onClick={handleClose} autoFocus>
-                        Enregistrer
-                    </Button>
-                </DialogActions>
-            </BootstrapDialog>
+                <RdvForm
+                    eventDate={eventDate}
+                    eventId={eventId}
+                    setEventId={setEventId}
+                    openPopup={openPopup}
+                ></RdvForm>
+            </Popup>
         </>
 
     );
