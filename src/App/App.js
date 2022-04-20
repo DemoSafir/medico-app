@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+BrowserRouter as Router,
+Navigate,
+Route,
+Routes,
+} from "react-router-dom";
 import './App.css';
 import SideMenu from '../components/SideMenu';
 import { CssBaseline, makeStyles, createMuiTheme } from '@material-ui/core';
@@ -8,6 +14,7 @@ import DB from '../pages/DB/DB';
 import RendezVous from '../pages/RendezVous';
 
 import Patients from '../pages/Patients/Patients';
+import PatientForm from '../pages/Patients/PatientForm';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,10 +60,33 @@ function App() {
     <ThemeProvider theme={theme}>
       <SideMenu />
       <div className={classes.appMain}>
-        <Header />
-        {/* <DB /> */}
-        {/* <RendezVous /> */}
-        <RendezVous />
+       {/* This is the alias of BrowserRouter i.e. Router */}
+          <Router>
+            <Routes>
+           
+            <Route
+                    path="/"
+                    element={ <Patients /> }
+                />
+      
+            <Route
+                    path="/PatientForm"
+                    element={ <PatientForm /> }
+                />
+              
+           
+            <Route
+                    path="/RendezVous"
+                    element={ <RendezVous /> }
+                />
+              
+            
+            <Route
+                    path="/"
+                    element={ <Navigate to="/Patients" /> }
+                />
+            </Routes>
+          </Router>
       </div>
       <CssBaseline />
     </ThemeProvider>
@@ -64,3 +94,4 @@ function App() {
 }
 
 export default App;
+

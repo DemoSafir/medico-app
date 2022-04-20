@@ -1,11 +1,21 @@
-import React from 'react'
+import React,{ useEffect} from 'react'
 import { Box, Grid, makeStyles, Paper, Tab } from '@material-ui/core';
 import { useForm, Form } from '../../components/useForm'
 import Controls from '../../components/controls/Controls';
 import * as patientService from '../../services/patientService';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import PageHeader from '../../components/PageHeader';
+import Header from '../../components/Header';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import { Link } from "react-router-dom";
 
-
+const useStyles = makeStyles(theme => ({
+    pageContent: {
+        margin: theme.spacing(2),
+        marginTop: theme.spacing(0),
+        padding: theme.spacing(2)
+    }
+}))
 
 const sexeItems = [
     { id: 'homme', title: 'Homme' },
@@ -13,6 +23,7 @@ const sexeItems = [
 ]
 
 const initialFValues = {
+    id:0,       
     cin: '',
     nom: '',
     prenom: '',
@@ -24,7 +35,15 @@ const initialFValues = {
     dateNaissance: new Date(),
     mutuelle: '',
 }
-export default function PatientForm() {
+export default function PatientForm(props) {
+
+    const { addOrEdit, recordForEdit } = props
+    const classes = useStyles();
+    const [value, setValue] = React.useState('1');
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
@@ -63,11 +82,37 @@ export default function PatientForm() {
 
     const handleSubmit = e => {
         e.preventDefault();
-        if(validate())
-           patientService.insertPatient(values)
+         if (validate()) {
+            addOrEdit(values, resetForm);
+        }
     }
 
+    useEffect(() => {
+        if (recordForEdit != null)
+            setValues({
+                ...recordForEdit
+            })
+    }, [recordForEdit])
+
+
     return (
+        <>
+    {/* <Header />
+        <PageHeader
+                title="Nouveau Patient"
+                subtitle="Conception de formulaire avec validation"
+                icon={<PeopleOutlineIcon fontSize="large" /> }
+        />*/}
+        <Paper className={classes.pageContent}>
+        <Box sx={{ width: '100%', typography: 'body1' }} className={classes.pageContent}>
+            <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList onChange={handleChange} aria-label="lab API tabs example">
+                        <Tab label="Informations Personnelles" value="1" />
+                    </TabList>
+                </Box>
+            </TabContext>
+        </Box>
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
@@ -145,10 +190,12 @@ export default function PatientForm() {
                             error={errors.mutuelle}
                     />
                     <div>
+                        {/*<Link to="/" style={{textDecoration:"none"}}>*/}
                         <Controls.Button
                             type="submit"
                             text="Enregistrer"
                         />
+                        {/*</Link>*/}
                         <Controls.Button
                             text="Annuler"
                             color="default"
@@ -158,5 +205,7 @@ export default function PatientForm() {
                 </Grid>
             </Grid>
         </Form>
+        </Paper>
+    </>
     )
 }

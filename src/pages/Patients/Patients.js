@@ -1,4 +1,4 @@
-import React,{ useState} from 'react'
+import React,{ useState } from 'react'
 import PatientForm from './PatientForm'
 import PageHeader from '../../components/PageHeader'
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline'
@@ -8,8 +8,14 @@ import { TableBody } from '@mui/material'
 import * as patientService from '../../services/patientService'
 import Controls from '../../components/controls/Controls'
 import { Search } from '@mui/icons-material'
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
 import Popup from '../../components/Popup'
+import Notification from "../../components/Notification";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import CloseIcon from '@mui/icons-material/Close';
+import { Link } from "react-router-dom";
+import Header from '../../components/Header'
 
 
 
@@ -33,9 +39,9 @@ const headCells = [
     {id: 'prenom',label:'Prenom'},
     {id: 'age',label:'Age'},
     {id: 'telephone',label:'Telephone'},
-    {id: 'email',label:'Email'},
     {id: 'sexe',label:'Sexe'},
-    {id: 'mutuelle',label:'Mutuelle',disableSorting:true},
+    {id: 'mutuelle',label:'Mutuelle'},
+    {id: 'actions',label:'Actions', disableSorting:true}
 ]
 
 export default function Patients() {
@@ -43,6 +49,9 @@ export default function Patients() {
     const [records, setRecords] = useState(patientService.getAllPatients());
     const [filterFn, setFilterFn] = useState({fn:items =>{return items;}}); 
     const [openPopup, setOpenPopup] = useState(false);
+    const [recordForEdit, setRecordForEdit] = useState(null);
+    const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
     const { 
         TblContainer,
@@ -58,14 +67,49 @@ export default function Patients() {
                 if(target.value == "")
                     return items;   
                     else
-                    return items.filter(x =>x.cin.toLowerCase.includes(target.value))
+                    return items.filter(x =>x.cin.includes(target.value))
             }
         })
     }
 
+    const addOrEdit = (patient, resetForm) => {
+        if(patient.id == 0)
+            patientService.insertPatient(patient)
+        else
+            patientService.updatePatient(patient)
+        resetForm()
+        setRecordForEdit(null)
+        setOpenPopup(false)
+        setRecords(patientService.getAllPatients())
+         setNotify({
+            isOpen: true,
+            message: 'Enregistré avec succès',
+            type: 'success'
+        })
+    }
 
-  return (
-      <>
+    const openInPopup = item =>{
+        setRecordForEdit(item)
+        setOpenPopup(true)
+    }
+
+    const onDelete = id => {
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: false
+        })
+        patientService.deletePatient(id);
+        setRecords(patientService.getAllPatients())
+        setNotify({
+            isOpen: true,
+            message: 'Supprimé avec succès',
+            type: 'error'
+        })
+    }
+
+    return (
+        <>
+            <Header />
             <PageHeader
                 title="Nouveau Patient"
                 subtitle="Conception de formulaire avec validation"
@@ -84,13 +128,15 @@ export default function Patients() {
                         }}
                         onChange={handelSearch}
                     />
+                   { /* <Link to="/PatientForm">*/}
                     <Controls.Button 
                         text= "Ajouter"
                         variant="outlined"
                         startIcon={<AddIcon />  }
                         className={classes.newButton}
-                        onClick={() => setOpenPopup(true)}
+                        onClick={() => {setOpenPopup(true);setRecordForEdit(null);}}
                     /> 
+                     { /*</Link>*/}
                  </Toolbar>
                  <TblContainer>
                      <TblHead/>
@@ -103,20 +149,52 @@ export default function Patients() {
                                     <TableCell>{item.prenom}</TableCell>
                                     <TableCell>{item.age}</TableCell>
                                     <TableCell>{item.telephone}</TableCell>
-                                    <TableCell>{item.email}</TableCell>
                                     <TableCell>{item.sexe}</TableCell>
                                     <TableCell>{item.mutuelle}</TableCell>
+                                    <TableCell>
+                                        <Controls.ActionButton
+                                        color="primary"
+                                        onClick={() => {openInPopup(item)}}
+                                        >
+                                            <ModeEditOutlineIcon fontSize="small" />
+                                        </Controls.ActionButton>
+                                        <Controls.ActionButton
+                                        color="secondary"
+                                        onClick={() => {
+                                                setConfirmDialog({
+                                                    isOpen: true,
+                                                    title: 'Voulez-vous vraiment supprimer cet enregistrement ?',
+                                                    subTitle: "Vous ne pouvez pas annuler cette opération",
+                                                    onConfirm: () => { onDelete(item.id) }
+                                                })
+                                            }}>
+                                            <CloseIcon fontSize="small" />
+                                        </Controls.ActionButton>
+                                    </TableCell>
                                 </TableRow>))
                             }
                         </TableBody>
                 </TblContainer>
                 <TblPagination/>
             </Paper>
-            <Popup
+           <Popup
+                title="Nouveau Patient"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
             >
-            </Popup>  
+            <PatientForm 
+            recordForEdit={recordForEdit}
+            addOrEdit={addOrEdit}
+            />
+            </Popup> 
+            <Notification
+                notify={notify}
+                setNotify={setNotify}
+            />
+            <ConfirmDialog
+                confirmDialog={confirmDialog}
+                setConfirmDialog={setConfirmDialog}
+            />
       </>
   )
 }

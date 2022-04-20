@@ -1,13 +1,13 @@
 const KEYS ={
     patients:'patients',
-    patientsId:'patientsId'
+    patientId:'patientId'
 }
 
 
 export const getMutuelleCollection = () => ([
-    { id:'1', title:'CNSS'},
-    { id:'2', title:'FAR'},
-    { id:'3', title:'Autres'},
+    { id:'CNSS', title:'CNSS'},
+    { id:'FAR', title:'FAR'},
+    { id:'Autres', title:'Autres'},
 ])
 
 
@@ -16,6 +16,19 @@ export function insertPatient(data){
     data['id']= generatePatientId();
     patients.push(data);
     localStorage.setItem(KEYS.patients,JSON.stringify(patients))
+}
+
+export function updatePatient(data) {
+    let patients = getAllPatients();
+    let recordIndex = patients.findIndex(x => x.id == data.id);
+    patients[recordIndex] = { ...data }
+    localStorage.setItem(KEYS.patients, JSON.stringify(patients));
+}
+
+export function deletePatient(id) {
+    let patients = getAllPatients();
+    patients = patients.filter(x => x.id != id)
+    localStorage.setItem(KEYS.patients, JSON.stringify(patients));
 }
 
 export function generatePatientId(){
@@ -29,11 +42,11 @@ export function generatePatientId(){
 export function getAllPatients(){
     if(localStorage.getItem(KEYS.patients)==null)
         localStorage.setItem(KEYS.patients, JSON.stringify([]))
-    let patients = JSON.parse(localStorage.getItem(KEYS.patients));
+    return  JSON.parse(localStorage.getItem(KEYS.patients));
     //map mutuelleId to mutuelle title
-    let mutuelles = getMutuelleCollection();
-    return patients.map(x=>({
-        ...x,
-        mutuelle : mutuelles[x.mutuelle-1].title
-    }))
+    //let mutuelles = getMutuelleCollection();
+   // return patients.map(x=>({
+    //    ...x,
+    //    mutuelle : mutuelles[x.mutuelle-1].title
+    //}))
 }

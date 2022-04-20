@@ -3,6 +3,7 @@ import RadioGroup from './RadioGroup';
 import Select from './Select';
 import DatePicker from './DatePicker';
 import Button from './Button';
+import ActionButton from './ActionButton';      
 
 
 const Controls = {
@@ -10,7 +11,8 @@ const Controls = {
         RadioGroup,
         Select,
         DatePicker,
-        Button
+        Button,
+        ActionButton
 }
 
 export default Controls;
