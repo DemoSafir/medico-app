@@ -1,4 +1,4 @@
-import React,{ useState }from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 
 export function useForm(initialFValues,validateOnChange=false,validate) {
@@ -19,7 +19,7 @@ export function useForm(initialFValues,validateOnChange=false,validate) {
       setValues(initialFValues);
       setErrors({});
     }
-
+    
   return {
     values,
     setValues,
@@ -27,16 +27,17 @@ export function useForm(initialFValues,validateOnChange=false,validate) {
     setErrors,
     handleInputChange,
     resetForm
+
   }
 }
 
 const useStyles = makeStyles(theme => ({
-    root: {
-'& .MuiFormControl-root':{
-    width: '80%',
-    margin:theme.spacing(1)
-}
+  root: {
+    '& .MuiFormControl-root': {
+      width: '80%',
+      margin: theme.spacing(1)
     }
+  }
 }))
 
 export function Form(props) {
@@ -45,6 +46,7 @@ export function Form(props) {
   return (
     <form className={classes.root}  {...other} > 
        {props.children}
+
     </form>
   )
 }

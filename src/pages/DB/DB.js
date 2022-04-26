@@ -1,9 +1,9 @@
 import React from 'react'
-import PatientForm from '../Patients/PatientForm'
 import PageHeader from '../../components/PageHeader'
 import { Storage } from '@mui/icons-material'
 import { Paper, makeStyles, Box, Tab } from '@material-ui/core'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
+import Antecedents from './Antecedents'
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -37,7 +37,7 @@ export default function Patients() {
                                 <Tab label="Medicaments" value="4" />
                             </TabList>
                         </Box>
-                        <TabPanel value="1">Antecedents </TabPanel>
+                        <TabPanel value="1"><Antecedents /> </TabPanel>
                         <TabPanel value="2">Examens </TabPanel>
                         <TabPanel value="3">Bilan Medical</TabPanel>
                         <TabPanel value="4">Medicaments</TabPanel>

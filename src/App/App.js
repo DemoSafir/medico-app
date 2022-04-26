@@ -52,8 +52,27 @@ const useStyles = makeStyles({
   }
 })
 
+function App() {
+  const classes = useStyles();
+  return (
+    <ThemeProvider theme={theme}>
+      <SideMenu />
+      <div className={classes.appMain}>
+        <Header />
+         <DB />
 
+        {/*<RendezVous />*/}
+        {/* <Patients /> */}
 
+      </div>
+      <CssBaseline />
+    </ThemeProvider>
+  );
+}
+
+export default App;
+// eslint-disable-next-line no-lone-blocks
+{/*
 function App() {
   const classes = useStyles();
   return (
@@ -61,7 +80,8 @@ function App() {
       <SideMenu />
       <div className={classes.appMain}>
        {/* This is the alias of BrowserRouter i.e. Router */}
-          <Router>
+        // eslint-disable-next-line no-lone-blocks
+        {/* <Router>
             <Routes>
            
             <Route
@@ -94,4 +114,4 @@ function App() {
 }
 
 export default App;
-
+*/}
